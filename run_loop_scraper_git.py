@@ -1,14 +1,26 @@
-from gen_scraper import gen_scraper
-import argparse
-from datetime import datetime
 import pandas as pd
+import time 
+from datetime import datetime
+import math
+import requests
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import urllib.request
+#import codecs
+#import unidecode
+import datasheets
+import lxml.html
+import sys
+import pickle
+from selenium.webdriver.chrome.options import Options
 
+from gen_scraper import gen_scraper
 
 date = datetime.now().strftime('%m-%d_%H%M')
 
 job_title = 'python'
 city_list = ['Boston']
-results_per_site = 3000
+results_per_site = 25
 
 fetch = pd.DataFrame()
 
@@ -16,16 +28,22 @@ for index, city in enumerate(city_list):
 
     print('\n', city)
     
-    param_dict = {'results_per_site' : results_per_site,
-        'job_title' : job_title,
-        'city' : city, 
-        'site_list' : ['indeed', 'glassdoor'], # Indeed, Glassdoor, linkedin
-        'linked_in_username' : 'YOUREMAIL',
-        'linked_in_password' : 'YOURPASS', 
-        'chromedriver_location' : u'Chromedriverloc', # Where chromedriver.exe is
-        'run_key' : city[0:1], # Adds these letters to the ID of each pull
-        'api_key' : 'yourAPIKey' # Google maps API
-    }
+    param_dict_git = {
+    'results' : 8,
+    'job_title' : 'python',
+    'city' : 'boston',
+    'site_list' : ['indeed'],
+    'linkedin_username' : 'YOUREMAIL',
+    'linkedin_password' : 'YOURPASS',
+    'chromedriver_location' : 'YOURCHROMEDRIVERLOC',
+    'api_key' : 'APIKEY' ,
+    'headless_arg' : True,
+    'push_to_docs_flag' : True
+    'google_docs_email' : 'DOCSEMAIL', 
+    'docs_book' : 'DOCSBOOK', 
+    'docs_sheet' : 'test'
+}
+
 
     fetch = fetch.append(gen_scraper(**param_dict))
 
